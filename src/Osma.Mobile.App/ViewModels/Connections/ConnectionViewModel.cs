@@ -11,6 +11,7 @@ using AgentFramework.Core.Models.Records;
 using Osma.Mobile.App.Events.Osma.Mobile.App.Events;
 using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.Services.Interfaces;
+using Osma.Mobile.App.ViewModels.Connections.Chat;
 using Osma.Mobile.App.Views.Connections;
 using ReactiveUI;
 using Xamarin.Forms;
@@ -92,6 +93,19 @@ namespace Osma.Mobile.App.ViewModels.Connections
                                 PrimaryActionCommand = new Command(async () =>
                                 {
                                     await PingConnectionAsync();
+                                }, () => true),
+                                Type = TransactionItemType.Action.ToString("G")
+                            });
+                            break;
+                        case "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/basicmessage/1.0":
+                            transactions.Add(new TransactionItem()
+                            {
+                                Title = "Basic Message",
+                                Subtitle = "Version 1.0",
+                                PrimaryActionTitle = "Message",
+                                PrimaryActionCommand = new Command(async () =>
+                                {
+                                    await NavigationService.NavigateToAsync<ChatViewModel>(_record);
                                 }, () => true),
                                 Type = TransactionItemType.Action.ToString("G")
                             });
