@@ -147,7 +147,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         #region Bindable Command
         public ICommand NavigateBackCommand => new Command(async () =>
         {
-            await NavigationService.PopModalAsync();
+            await NavigationService.NavigateBackAsync();
         });
 
         public ICommand DeleteConnectionCommand => new Command(async () =>
@@ -165,7 +165,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                 dialog.Dispose();
             }
 
-            await NavigationService.PopModalAsync();
+            await NavigationService.NavigateBackAsync();
         });
 
         public ICommand RefreshTransactionsCommand => new Command(async () => await RefreshTransactions());
