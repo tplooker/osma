@@ -327,6 +327,18 @@
     <ImageAsset Include="Assets.xcassets\camera_icon.imageset\outline_photo_camera_white_24pt_3x.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ic_scrolldown.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ic_scrolldown.imageset\ic_scrolldown.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ic_scrolldown.imageset\ic_scrolldown2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\ic_scrolldown.imageset\ic_scrolldown3x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="libs\libcrypto.a">
@@ -394,6 +406,7 @@
     <Folder Include="Assets.xcassets\legal_icon.imageset\" />
     <Folder Include="Assets.xcassets\save_icon.imageset\" />
     <Folder Include="Assets.xcassets\security_icon.imageset\" />
+    <Folder Include="Assets.xcassets\ic_scrolldown.imageset\" />
     <Folder Include="libs\" />
   </ItemGroup>
 </Project>

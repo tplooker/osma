@@ -20,6 +20,10 @@
             <Color x:Key="NavigationBarColor">#2196f3</Color>
             <Color x:Key="NavigationBarTextColor">#ffffff</Color>
 
+            <Color x:Key="ChatCellTextColor">#ffffff</Color>
+            <Color x:Key="IncomingChatCellBackgroundColor">LightBlue</Color>
+            <Color x:Key="OutgoingChatCellBackgroundColor">Gray</Color>
+
             <Style
                 TargetType="NavigationPage"
                 ApplyToDerivedTypes="true">

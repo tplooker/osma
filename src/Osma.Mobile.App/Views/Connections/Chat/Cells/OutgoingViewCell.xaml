@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Osma.Mobile.App.Views.Connections.Chat.Cells.OutgoingViewCell">
     <ViewCell.View>
-        <Frame BackgroundColor="Gray"
+        <Frame BackgroundColor="{StaticResource OutgoingChatCellBackgroundColor}"
             Padding="10"
             Rotation="180"
             FlowDirection="LeftToRight"
             HasShadow="false"
             Margin="80,10,10,10">
             <Label Text="{Binding Text}"
-                  TextColor="White"/>
+                   TextColor="{StaticResource ChatCellTextColor}"/>
         </Frame>
     </ViewCell.View>
 </ViewCell> 
