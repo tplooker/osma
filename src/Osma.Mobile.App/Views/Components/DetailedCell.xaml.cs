@@ -70,7 +70,7 @@ namespace Osma.Mobile.App.Views.Components
             DetailedCell cell = (DetailedCell)bindable;
             Device.BeginInvokeOnMainThread(() =>
             {
-                cell.Image.Source = newValue.ToString();
+                cell.Image.Source = newValue?.ToString();
             });
         }
 
