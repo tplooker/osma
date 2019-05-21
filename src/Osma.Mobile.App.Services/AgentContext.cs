@@ -3,6 +3,7 @@ using AgentFramework.Core.Contracts;
 using AgentFramework.Core.Messages;
 using AgentFramework.Core.Models;
 using Hyperledger.Indy.WalletApi;
+using Osma.Mobile.App.Services.Models;
 
 namespace Osma.Mobile.App.Services
 {

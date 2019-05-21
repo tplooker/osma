@@ -22,6 +22,7 @@
     <PackageReference Include="AgentFramework.Core" Version="4.0.0-preview.635" />
     <PackageReference Include="AgentFramework.Core.Handlers" Version="4.0.0-preview.635" />
     <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
   </ItemGroup>
 
 </Project>
