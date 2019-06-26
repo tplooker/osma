@@ -18,6 +18,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
     {
         private readonly IProvisioningService _provisioningService;
         private readonly IConnectionService _connectionService;
+        private readonly ICloudAgentRegistrationService _registrationService;
         private readonly IMessageService _messageService;
         private readonly ICustomAgentContextProvider _contextProvider;
         private readonly IEventAggregator _eventAggregator;
@@ -29,6 +30,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                                      INavigationService navigationService,
                                      IProvisioningService provisioningService,
                                      IConnectionService connectionService,
+                                     ICloudAgentRegistrationService registrationService,
                                      IMessageService messageService,
                                      ICustomAgentContextProvider contextProvider,
                                      IEventAggregator eventAggregator)
@@ -36,6 +38,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
         {
             _provisioningService = provisioningService;
             _connectionService = connectionService;
+            _registrationService = registrationService;
             _contextProvider = contextProvider;
             _messageService = messageService;
             _contextProvider = contextProvider;
@@ -52,6 +55,8 @@ namespace Osma.Mobile.App.ViewModels.Connections
                 _invite = invite;
             } else if (navigationData is CloudAgentRegistrationMessage registration)
             {
+                InviteTitle = $"Trust {registration.Label}?";
+                InviteContents = $"Would like to register {registration.Label} as your Cloud Agent?";
                 _invite = registration;
             }
             return base.InitializeAsync(navigationData);
@@ -67,6 +72,11 @@ namespace Osma.Mobile.App.ViewModels.Connections
             {
                 await _connectionService.ProcessResponseAsync(context, rsp.GetMessage<ConnectionResponseMessage>(), rec);
             }
+        }
+
+        private async Task RegisterCloudAgent(IAgentContext context, CloudAgentRegistrationMessage registration)
+        {
+            await _registrationService.RegisterCloudAgentAsync(context, registration);
         }
 
         #region Bindable Commands
@@ -91,7 +101,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                     await CreateConnection(context, (ConnectionInvitationMessage)_invite);
                 } else if (_invite is CloudAgentRegistrationMessage)
                 {
-                    DialogService.Alert("Cloud Agent PALO007 Registered! Sukalpo is awesome!");
+                    await RegisterCloudAgent(context, (CloudAgentRegistrationMessage)_invite);
                 }
             }
             catch (AgentFrameworkException agentFrameworkException)
