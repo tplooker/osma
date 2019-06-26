@@ -102,6 +102,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                 } else if (_invite is CloudAgentRegistrationMessage)
                 {
                     await RegisterCloudAgent(context, (CloudAgentRegistrationMessage)_invite);
+                    DialogService.Alert("Cloud Agent registered successfully!");
                 }
             }
             catch (AgentFrameworkException agentFrameworkException)
