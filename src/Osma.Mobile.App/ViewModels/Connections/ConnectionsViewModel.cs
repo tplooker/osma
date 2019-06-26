@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
 using AgentFramework.Core.Contracts;
+using AgentFramework.Core.Messages;
 using AgentFramework.Core.Messages.Connections;
 using AgentFramework.Core.Utils;
 using Autofac;
@@ -83,11 +84,27 @@ namespace Osma.Mobile.App.ViewModels.Connections
             scannerPage.OnScanResult += (result) => {
                 scannerPage.IsScanning = false;
 
-                ConnectionInvitationMessage invitation;
+                AgentMessage invitation;
+                var messageType = result.Text.Contains("c_a_r=") ? MessageTypes.CloudAgentRegistration : MessageTypes.ConnectionInvitation;
 
                 try
                 {
-                    invitation = MessageUtils.DecodeMessageFromUrlFormat<ConnectionInvitationMessage>(result.Text);
+                    switch (messageType)
+                    {
+                        case MessageTypes.CloudAgentRegistration:
+                            invitation = MessageUtils.DecodeMessageFromUrlFormat<CloudAgentRegistrationMessage>(result.Text);
+                            break;
+                        case MessageTypes.ConnectionInvitation:
+                            invitation = MessageUtils.DecodeMessageFromUrlFormat<ConnectionInvitationMessage>(result.Text);
+                            break;
+                        default:
+                            invitation = null;
+                            break;
+                    }
+                    if (invitation == null)
+                    {
+                        throw new InvalidOperationException();
+                    }
                 }
                 catch (Exception)
                 {
