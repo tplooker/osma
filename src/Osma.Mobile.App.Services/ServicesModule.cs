@@ -51,6 +51,11 @@ namespace Osma.Mobile.App.Services
                 .SingleInstance();
 
             builder
+                .RegisterType<DefaultCloudRegistrationService>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder
                 .RegisterType<DefaultCredentialService>()
                 .AsImplementedInterfaces()
                 .SingleInstance();

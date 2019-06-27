@@ -101,7 +101,13 @@ namespace Osma.Mobile.App.ViewModels.Connections
                     await CreateConnection(context, (ConnectionInvitationMessage)_invite);
                 } else if (_invite is CloudAgentRegistrationMessage)
                 {
-                    await RegisterCloudAgent(context, (CloudAgentRegistrationMessage)_invite);
+                    var registration = (CloudAgentRegistrationMessage)_invite;
+                    var records = await _registrationService.GetAllCloudAgentAsync(context);
+                    if (records.FindAll(x => x.Label.Equals(registration.Label)).Count != 0)
+                    {
+                        throw new AgentFrameworkException(ErrorCode.CloudAgentAlreadyRegistered, $"{registration.Label} already registered!");
+                    }
+                    await RegisterCloudAgent(context, registration);
                     DialogService.Alert("Cloud Agent registered successfully!");
                 }
             }
