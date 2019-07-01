@@ -66,7 +66,15 @@ namespace Osma.Mobile.App.ViewModels.Connections
         {
             var provisioningRecord = await _provisioningService.GetProvisioningAsync(context.Wallet);
             var isEndpointUriAbsent = provisioningRecord.Endpoint.Uri == null;
-            var (msg, rec) = await _connectionService.CreateRequestAsync(context, invite);
+            var records = await _registrationService.GetAllCloudAgentAsync(context.Wallet);
+            string responseEndpoint = string.Empty;
+            if (records.Count > 0)
+            {
+                var record = _registrationService.getRandomCloudAgent(records);
+                responseEndpoint = record.Endpoint.ResponseEndpoint;
+                isEndpointUriAbsent = false;
+            }
+            var (msg, rec) = await _connectionService.CreateRequestAsync(context, invite, responseEndpoint);
             var rsp = await _messageService.SendAsync(context.Wallet, msg, rec, invite.RecipientKeys.First(), isEndpointUriAbsent);
             if (isEndpointUriAbsent)
             {
@@ -76,6 +84,11 @@ namespace Osma.Mobile.App.ViewModels.Connections
 
         private async Task RegisterCloudAgent(IAgentContext context, CloudAgentRegistrationMessage registration)
         {
+            var records = await _registrationService.GetAllCloudAgentAsync(context.Wallet);
+            if (records.FindAll(x => x.Label.Equals(registration.Label)).Count != 0)
+            {
+                throw new AgentFrameworkException(ErrorCode.CloudAgentAlreadyRegistered, $"{registration.Label} already registered!");
+            }
             await _registrationService.RegisterCloudAgentAsync(context, registration);
         }
 
@@ -101,13 +114,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
                     await CreateConnection(context, (ConnectionInvitationMessage)_invite);
                 } else if (_invite is CloudAgentRegistrationMessage)
                 {
-                    var registration = (CloudAgentRegistrationMessage)_invite;
-                    var records = await _registrationService.GetAllCloudAgentAsync(context);
-                    if (records.FindAll(x => x.Label.Equals(registration.Label)).Count != 0)
-                    {
-                        throw new AgentFrameworkException(ErrorCode.CloudAgentAlreadyRegistered, $"{registration.Label} already registered!");
-                    }
-                    await RegisterCloudAgent(context, registration);
+                    await RegisterCloudAgent(context, (CloudAgentRegistrationMessage)_invite);
                     DialogService.Alert("Cloud Agent registered successfully!");
                 }
             }
