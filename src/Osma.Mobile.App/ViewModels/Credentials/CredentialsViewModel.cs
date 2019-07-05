@@ -12,6 +12,7 @@ using Osma.Mobile.App.Extensions;
 using Osma.Mobile.App.Services;
 using Osma.Mobile.App.Services.Interfaces;
 using Osma.Mobile.App.Utilities;
+using Osma.Mobile.App.ViewModels.Account;
 using ReactiveUI;
 using Xamarin.Forms;
 
@@ -142,6 +143,9 @@ namespace Osma.Mobile.App.ViewModels.Credentials
 
 
         #region Bindable Command
+
+        public ICommand CheckAccountCommand => new Command(async () => await NavigationService.NavigateToAsync<AccountViewModel>());
+
         public ICommand SelectCredentialCommand => new Command<CredentialViewModel>(async (credentials) =>
         {
             if (credentials != null)
