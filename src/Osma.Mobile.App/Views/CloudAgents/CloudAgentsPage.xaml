@@ -31,7 +31,7 @@
              >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <components:DetailedCell Title="{ Binding Label }" HasDelete="true"/>
+                        <components:DetailedCell Title="{ Binding Label }"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
