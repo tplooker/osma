@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
 using AgentFramework.Core.Contracts;
+using AgentFramework.Core.Handlers.Agents;
 using AgentFramework.Core.Models.Records;
 using Autofac;
 using Osma.Mobile.App.Extensions;
