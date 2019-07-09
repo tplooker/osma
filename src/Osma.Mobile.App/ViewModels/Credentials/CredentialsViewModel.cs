@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
 using AgentFramework.Core.Contracts;
-using AgentFramework.Core.Handlers.Agents;
 using AgentFramework.Core.Models.Records;
 using Autofac;
 using Osma.Mobile.App.Extensions;
@@ -24,12 +23,14 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         private readonly ICredentialService _credentialService;
         private readonly ICustomAgentContextProvider _agentContextProvider;
         private readonly ILifetimeScope _scope;
+        private readonly IConnectionService _connectionService;
 
         public CredentialsViewModel(
             IUserDialogs userDialogs,
             INavigationService navigationService,
             ICredentialService credentialService,
             ICustomAgentContextProvider agentContextProvider,
+            IConnectionService connectionService,
             ILifetimeScope scope
             ) : base(
                 "Credentials",
@@ -37,9 +38,9 @@ namespace Osma.Mobile.App.ViewModels.Credentials
                 navigationService
            )
         {
-
             _credentialService = credentialService;
             _agentContextProvider = agentContextProvider;
+            _connectionService = connectionService;
             _scope = scope;
 
             this.WhenAnyValue(x => x.SearchTerm)
@@ -141,16 +142,37 @@ namespace Osma.Mobile.App.ViewModels.Credentials
 
         }
 
-        private void CreateInvitation()
+        private async Task CreateInvitation()
         {
             DialogService.Alert("Invitation Created");
-            //var context = await _agentContextProvider.GetContextAsync();
-            //var invitation = await _defaultConnectionService.CreateInvitationAsync(context); 
+
+            var context = await _agentContextProvider.GetContextAsync();
+            var invitation = await _connectionService.CreateInvitationAsync(context); 
+
+            //use the invitation to generate the QR code
         }
 
-        #region Bindable Command
+        //private void createQRCode()
+        //{
+        //    ZXing.IBarcodeWriter writer = new ZXing.BarcodeWriter
+        //    { Format = BarcodeFormat.QR_CODE };
+        //    var result = writer.Write("Hello");
+        //    var barcodeBitmap = new Bitmap(result);
+        //    pictureBox1.Image = barcodeBitmap;
+        //}
 
-        public ICommand CheckAccountCommand => new Command(async () => await NavigationService.NavigateToAsync<AccountViewModel>());
+        //private void createQRCode() {
+        //    Writer writer = new QRCodeWriter();
+        //    string finaldata = "1000000";
+        //    BitMatrix bm = writer.encode(finaldata, BarcodeFormat.QR_CODE, 600, 600);
+        //    BitmapRenderer bit = new BitmapRenderer();
+        //    UIImage image = bit.Render(bm, BarcodeFormat.QR_CODE, finaldata);
+        //    ivwTicket.Image = image;
+        //}
+
+    #region Bindable Command
+
+    public ICommand CheckAccountCommand => new Command(async () => await NavigationService.NavigateToAsync<AccountViewModel>());
 
         public ICommand SelectCredentialCommand => new Command<CredentialViewModel>(async (credentials) =>
         {
