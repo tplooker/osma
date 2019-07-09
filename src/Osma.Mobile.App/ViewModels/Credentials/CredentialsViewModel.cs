@@ -141,7 +141,12 @@ namespace Osma.Mobile.App.ViewModels.Credentials
 
         }
 
-
+        private void CreateInvitation()
+        {
+            DialogService.Alert("Invitation Created");
+            //var context = await _agentContextProvider.GetContextAsync();
+            //var invitation = await _defaultConnectionService.CreateInvitationAsync(context); 
+        }
 
         #region Bindable Command
 
@@ -154,6 +159,8 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         });
 
         public ICommand RefreshCommand => new Command(async () => await RefreshCredentials());
+
+        public ICommand CreateInvitationCommand => new Command(() => CreateInvitation());
 
         #endregion
 
