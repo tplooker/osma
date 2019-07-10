@@ -151,7 +151,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             var context = await _agentContextProvider.GetContextAsync();
             var (invitation, _)= await _connectionService.CreateInvitationAsync(context);
             
-            String barcodeValue = String.Format("%1?c_i=%2", invitation.ServiceEndpoint, (invitation.ToJson().ToBase64()));
+            string barcodeValue = invitation.ServiceEndpoint + "?c_i=" + (invitation.ToJson().ToBase64());
 
             //QRCodeGenerator(barcodeValue); //set a view attribute, to show on the screen. 
 
