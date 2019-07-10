@@ -15,6 +15,8 @@ using Osma.Mobile.App.Utilities;
 using Osma.Mobile.App.ViewModels.Account;
 using ReactiveUI;
 using Xamarin.Forms;
+using ZXing.Net.Mobile.Forms;
+using AgentFramework.Core.Extensions;
 
 namespace Osma.Mobile.App.ViewModels.Credentials
 {
@@ -30,7 +32,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
             INavigationService navigationService,
             ICredentialService credentialService,
             ICustomAgentContextProvider agentContextProvider,
-            IConnectionService connectionService,
+            IConnectionService defaultConnectionService,
             ILifetimeScope scope
             ) : base(
                 "Credentials",
@@ -40,7 +42,7 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         {
             _credentialService = credentialService;
             _agentContextProvider = agentContextProvider;
-            _connectionService = connectionService;
+            _connectionService = defaultConnectionService;
             _scope = scope;
 
             this.WhenAnyValue(x => x.SearchTerm)
@@ -144,31 +146,36 @@ namespace Osma.Mobile.App.ViewModels.Credentials
 
         private async Task CreateInvitation()
         {
-            DialogService.Alert("Invitation Created");
+            DialogService.Alert("Invitation being created");
 
             var context = await _agentContextProvider.GetContextAsync();
-            var invitation = await _connectionService.CreateInvitationAsync(context); 
+            var (invitation, _)= await _connectionService.CreateInvitationAsync(context);
+            
+            String barcodeValue = String.Format("%1?c_i=%2", invitation.ServiceEndpoint, (invitation.ToJson().ToBase64()));
 
-            //use the invitation to generate the QR code
+            //QRCodeGenerator(barcodeValue); //set a view attribute, to show on the screen. 
+
+            QrCodeValue = barcodeValue;
         }
 
-        //private void createQRCode()
-        //{
-        //    ZXing.IBarcodeWriter writer = new ZXing.BarcodeWriter
-        //    { Format = BarcodeFormat.QR_CODE };
-        //    var result = writer.Write("Hello");
-        //    var barcodeBitmap = new Bitmap(result);
-        //    pictureBox1.Image = barcodeBitmap;
-        //}
+        private ZXingBarcodeImageView QRCodeGenerator(String barcodeValue)
+        {
+            var barcode = new ZXingBarcodeImageView
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                AutomationId = "zxingBarcodeImageView",
+            };
 
-        //private void createQRCode() {
-        //    Writer writer = new QRCodeWriter();
-        //    string finaldata = "1000000";
-        //    BitMatrix bm = writer.encode(finaldata, BarcodeFormat.QR_CODE, 600, 600);
-        //    BitmapRenderer bit = new BitmapRenderer();
-        //    UIImage image = bit.Render(bm, BarcodeFormat.QR_CODE, finaldata);
-        //    ivwTicket.Image = image;
-        //}
+            barcode.BarcodeFormat = ZXing.BarcodeFormat.QR_CODE;
+            barcode.BarcodeOptions.Width = 300;
+            barcode.BarcodeOptions.Height = 300;
+            barcode.BarcodeOptions.Margin = 10;
+            barcode.BarcodeValue = barcodeValue;
+
+            return barcode;
+
+        }
 
     #region Bindable Command
 
@@ -213,6 +220,14 @@ namespace Osma.Mobile.App.ViewModels.Credentials
         {
             get => _searchTerm;
             set => this.RaiseAndSetIfChanged(ref _searchTerm, value);
+        }
+
+        private string _qrCodeValue;
+
+        public string QrCodeValue
+        {
+            get => _qrCodeValue;
+            set => this.RaiseAndSetIfChanged(ref _qrCodeValue, value);
         }
 
         private IEnumerable<Grouping<string, CredentialViewModel>> _credentialsGrouped;
