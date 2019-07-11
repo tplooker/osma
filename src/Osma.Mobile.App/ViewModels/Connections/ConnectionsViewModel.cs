@@ -76,17 +76,14 @@ namespace Osma.Mobile.App.ViewModels.Connections
             Connections.InsertRange(connectionVms);
             HasConnections = connectionVms.Any();
 
-            if (HasConnections)
+            try
             {
-                try
-                {
-                    var messages = await _messageService.ConsumeAsync(context.Wallet);
-                    DialogService.Alert("Message consumed " + messages.Count);
-                }
-                catch (Exception ex)
-                {
+                var messages = await _messageService.ConsumeAsync(context.Wallet);
+                DialogService.Alert("Message consumed " + messages.Count);
+            }
+            catch (Exception ex)
+            {
                     
-                }
             }
 
             RefreshingConnections = false;
