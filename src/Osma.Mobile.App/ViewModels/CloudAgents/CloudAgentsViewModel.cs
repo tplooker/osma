@@ -20,11 +20,13 @@ namespace Osma.Mobile.App.ViewModels.CloudAgents
         private readonly ICustomAgentContextProvider _agentContextProvider;
         private readonly ICloudAgentRegistrationService _registrationService;
         private readonly ILifetimeScope _scope;
+        private readonly IMessageService _messageService;
 
         public CloudAgentsViewModel(IUserDialogs userDialogs, 
                                  INavigationService navigationService,
                                  ICustomAgentContextProvider agentContextProvider,
                                  ICloudAgentRegistrationService registrationService,
+                                 IMessageService messageService,
                                  ILifetimeScope scope) : base(
                                  nameof(CloudAgentsViewModel), 
                                  userDialogs, 
@@ -33,6 +35,7 @@ namespace Osma.Mobile.App.ViewModels.CloudAgents
             _agentContextProvider = agentContextProvider;
             _registrationService = registrationService;
             _scope = scope;
+            _messageService = messageService;
         }
 
         public override async Task InitializeAsync(object navigationData)
@@ -48,6 +51,19 @@ namespace Osma.Mobile.App.ViewModels.CloudAgents
             var context = await _agentContextProvider.GetContextAsync();
 
             CloudAgentsGrouped = await _registrationService.GetAllCloudAgentAsync(context.Wallet);
+            if (CloudAgentsGrouped.Count > 0)
+            {
+                try
+                {
+                    var messages = await _messageService.ConsumeAsync(context.Wallet);
+                    DialogService.Alert("Message consumed " + messages.Count);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            
             RefreshingCloudAgents = false;
         }
 
