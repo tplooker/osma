@@ -27,22 +27,19 @@ namespace Osma.Mobile.App.ViewModels.Connections
         private readonly ICustomAgentContextProvider _agentContextProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly ILifetimeScope _scope;
-        private readonly IMessageService _messageService;
 
         public ConnectionsViewModel(IUserDialogs userDialogs,
                                     INavigationService navigationService,
                                     IConnectionService connectionService,
                                     ICustomAgentContextProvider agentContextProvider,
                                     IEventAggregator eventAggregator,
-                                    ILifetimeScope scope,
-                                    IMessageService messageService) :
+                                    ILifetimeScope scope) :
                                     base("Connections", userDialogs, navigationService)
         {
             _connectionService = connectionService;
             _agentContextProvider = agentContextProvider;
             _eventAggregator = eventAggregator;
             _scope = scope;
-            _messageService = messageService;
         }
 
         public override async Task InitializeAsync(object navigationData)
@@ -75,16 +72,6 @@ namespace Osma.Mobile.App.ViewModels.Connections
             Connections.Clear();
             Connections.InsertRange(connectionVms);
             HasConnections = connectionVms.Any();
-
-            try
-            {
-                var messages = await _messageService.ConsumeAsync(context.Wallet);
-                DialogService.Alert("Message consumed " + messages.Count);
-            }
-            catch (Exception ex)
-            {
-                    
-            }
 
             RefreshingConnections = false;
         }
