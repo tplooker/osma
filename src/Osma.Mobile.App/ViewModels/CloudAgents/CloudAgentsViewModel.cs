@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using Acr.UserDialogs;
-using AgentFramework.Core.Models.Wallets;
 using Osma.Mobile.App.Services.Interfaces;
-using Osma.Mobile.App.Services.Models; 
-using Osma.Mobile.App.Utilities;
 using Xamarin.Forms;
 using ReactiveUI;
 using AgentFramework.Core.Models.Records;
 using System.Threading.Tasks;
 using AgentFramework.Core.Contracts;
 using Autofac;
+using AgentFramework.Core.Messages;
+using AgentFramework.Core.Utils;
 
 namespace Osma.Mobile.App.ViewModels.CloudAgents
 {
@@ -56,7 +55,11 @@ namespace Osma.Mobile.App.ViewModels.CloudAgents
                 try
                 {
                     var messages = await _messageService.ConsumeAsync(context.Wallet);
-                    DialogService.Alert("Message consumed " + messages.Count);
+                    foreach (var message in messages)
+                    {
+                        var response = await _messageService.UnpackAsync(context.Wallet, message, null);
+                        response.Payload.ToString();
+                    }
                 }
                 catch (Exception ex)
                 {

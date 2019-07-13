@@ -71,7 +71,7 @@ namespace Osma.Mobile.App.ViewModels.Connections
             if (records.Count > 0)
             {
                 var record = _registrationService.getRandomCloudAgent(records);
-                responseEndpoint = record.Endpoint.ResponseEndpoint;
+                responseEndpoint = record.Endpoint.ResponseEndpoint + "/" + record.MyConsumerId;
                 isEndpointUriAbsent = false;
             }
             var (msg, rec) = await _connectionService.CreateRequestAsync(context, invite, responseEndpoint);
