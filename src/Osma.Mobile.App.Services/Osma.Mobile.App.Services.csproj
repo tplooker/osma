@@ -19,9 +19,10 @@
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AgentFramework.Core" Version="4.0.0-preview.662" />
-    <PackageReference Include="AgentFramework.Core.Handlers" Version="4.0.0-preview.662" />
     <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Hyperledger.Aries" Version="1.0.3" />
+    <PackageReference Include="Hyperledger.Aries.Routing.Edge" Version="1.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.0" />
   </ItemGroup>
 
 </Project>

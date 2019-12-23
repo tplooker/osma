@@ -8,8 +8,8 @@ namespace Osma.Mobile.App.Tests
     {
         private AgentContext context = new AgentContext
             {
-                Did = "PNQm3CwyXbN5e39Rw3dXYx",
-                Verkey = "~AHtGeRXtGjVfXALtXP9WiX"
+                //Did = "PNQm3CwyXbN5e39Rw3dXYx",
+                //Verkey = "~AHtGeRXtGjVfXALtXP9WiX"
                 //Connection = "",
                 //Wallet = "",
             };

@@ -10,6 +10,12 @@ namespace Osma.Mobile.App.Droid
             base.Load(builder);
             builder.RegisterModule(new CoreModule());
             builder.RegisterModule(new ServicesModule());
+
+            builder.Register(container =>
+            {
+                var service = container.Resolve<IKeyValueStoreService>();
+                return Options.Create(service.GetData<AgentOptions>("AgentOptions"));
+            });
         }
     }
 }
